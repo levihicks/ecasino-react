@@ -9,9 +9,9 @@ module.exports = {
       colors: {
         'black': '#001207',
         'white': '#F8FFFB',
-        'green-dark': '#285238',
+        'greendark': '#285238',
         'green': '#138A36',
-        'green-light': '18FF6D'
+        'green-light': '#18FF6D'
       },
     },
   },

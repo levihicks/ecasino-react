@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'jit',
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: false,
   theme: {
@@ -9,10 +10,14 @@ module.exports = {
       colors: {
         'black': '#001207',
         'white': '#F8FFFB',
-        'greendark': '#285238',
+        'green-dark': '#285238',
         'green': '#138A36',
-        'green-light': '#18FF6D'
+        'green-light': '#18FF6D',
+        'red': '#FF0000',
       },
+      boxShadow: {
+        DEFAULT: '0 0 50px rgba(4, 232, 36, 1)',
+      }
     },
   },
   variants: {

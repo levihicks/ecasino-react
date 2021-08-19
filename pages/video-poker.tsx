@@ -6,6 +6,8 @@ import PlayingCardModel from '../models/playing-card'
 import getHighestHand from '../utils/poker-hands'
 import { RANKS, SUITS } from '../constants/card-values'
 import Modal from "../components/modal"
+import { useAppDispatch, } from "../hooks/typedReduxHooks"
+import { increment, decrement, } from '../store/bankrollSlice'
 
 interface HighestHand {
     reward: number;
@@ -22,6 +24,7 @@ export default function VideoPoker() {
     ))
     const [cardDeck, setCardDeck] = useState<PlayingCardModel[]>([])
     const [highestHand, setHighestHand] = useState<HighestHand | null>(null)
+    const dispatch = useAppDispatch()
 
     const isCardHeldAtIndex = (i: number) => heldCards.filter(c => c.index === i)[0]
 
@@ -52,14 +55,13 @@ export default function VideoPoker() {
         setRoundEnded(false)
         setHeldCards([])
         setCards(drawFromDeck(5, shuffleDeck()))
-        
-        // this.decrement({ value: this.bet });
+        dispatch(decrement(bet))
     }
 
     const drawNewCards = () => {
+        let newCards: PlayingCardModel[] = []
         if(heldCards.length < 5) {
             let drawnCards = drawFromDeck(5 - heldCards.length, cardDeck)
-            let newCards: PlayingCardModel[] = []
             let newCardIndex = 0
             for(let i = 0; i < 5; i++) {
                 let heldCard = isCardHeldAtIndex(i)
@@ -73,8 +75,9 @@ export default function VideoPoker() {
             setCards(newCards)
         }
         setRoundEnded(true)
-        setHighestHand(getHighestHand(cards))
-        // this.increment({ value: this.bet * newValue.reward });
+        const newHighestHand = getHighestHand(newCards)
+        dispatch(increment(bet * newHighestHand.reward ))
+        setHighestHand(newHighestHand)
     }
 
     const toggleHoldCard = (card: PlayingCardModel) => {
@@ -103,7 +106,7 @@ export default function VideoPoker() {
                             disabled={roundEnded}
                             held={Boolean(isCardHeldAtIndex(i))}
                             onClick={() => toggleHoldCard({...c, index: i})}
-                            />
+                        />
                     )
                 })}
                 {highestHand && (

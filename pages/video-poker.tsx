@@ -8,6 +8,7 @@ import { RANKS, SUITS } from '../constants/card-values'
 import Modal from "../components/modal"
 import { useAppDispatch, } from "../hooks/typedReduxHooks"
 import { increment, decrement, } from '../store/bankrollSlice'
+import useDeck from '../hooks/useDeck'
 
 interface HighestHand {
     reward: number;
@@ -22,31 +23,11 @@ export default function VideoPoker() {
     const [cards, setCards] = useState<PlayingCardModel[]>([...new Array(5)].map(
         (el, i) => { return { suit: String(i), rank: String(i) } }
     ))
-    const [cardDeck, setCardDeck] = useState<PlayingCardModel[]>([])
     const [highestHand, setHighestHand] = useState<HighestHand | null>(null)
     const dispatch = useAppDispatch()
+    const { deck, getShuffledDeck, drawFromDeck } = useDeck()
 
     const isCardHeldAtIndex = (i: number) => heldCards.filter(c => c.index === i)[0]
-
-    const shuffleDeck = () => {
-        let newDeck: PlayingCardModel[] = []
-        for(let s in SUITS) {
-            for(let r in RANKS) {
-                let randomIndex = Math.floor(Math.random() * 52)
-                while(newDeck[randomIndex] !== undefined) 
-                    randomIndex = Math.floor(Math.random() * 52)
-                newDeck[randomIndex] = { suit: SUITS[s], rank: RANKS[r] }
-            }
-        }
-        return [...newDeck]
-    }
-
-    const drawFromDeck = (amount: number, deck: PlayingCardModel[]) => {
-        let newDeck = [...deck]
-        let drawnCards = newDeck.splice(0, Math.min(deck.length, amount))
-        setCardDeck(newDeck)
-        return drawnCards
-    }
 
     const dealNewHand = () => {
         if(!gameStarted)
@@ -54,14 +35,14 @@ export default function VideoPoker() {
         setHighestHand(null)
         setRoundEnded(false)
         setHeldCards([])
-        setCards(drawFromDeck(5, shuffleDeck()))
+        setCards(drawFromDeck(5, getShuffledDeck()))
         dispatch(decrement(bet))
     }
 
     const drawNewCards = () => {
         let newCards: PlayingCardModel[] = []
         if(heldCards.length < 5) {
-            let drawnCards = drawFromDeck(5 - heldCards.length, cardDeck)
+            let drawnCards = drawFromDeck(5 - heldCards.length, deck)
             let newCardIndex = 0
             for(let i = 0; i < 5; i++) {
                 let heldCard = isCardHeldAtIndex(i)

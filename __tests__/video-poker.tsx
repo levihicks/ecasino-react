@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render, waitFor } from '../utils/test-utils'
 import userEvent from '@testing-library/user-event'
 import VideoPoker from '../pages/video-poker'
 
@@ -16,7 +16,7 @@ test('betting button functionality', () => {
     expect(betAmount).toHaveTextContent('1')
 })
 
-test.only('drawing and dealing functionality', async () => {
+test('drawing and dealing functionality', async () => {
     const { getByRole, getAllByTestId } = render(<VideoPoker />)
     let cards = getAllByTestId('playing-card')
     expect(cards).toHaveLength(5);
@@ -33,14 +33,15 @@ test.only('drawing and dealing functionality', async () => {
     expect(cards[0]).not.toHaveTextContent('HOLD')
 })
 
-test('reward functionality', () => {
+test('reward functionality', async () => {
     const { getByRole, getByText } = render(<VideoPoker />)
-    const bankroll = getByText(/bankroll: $/)
-    const drawDealButton = getByRole('button', { name: /draw/i })
+    const bankroll = getByText(/bankroll:/i)
+    const bankrollValue = Number(bankroll.textContent!.split('$')[1])
+    const drawDealButton = getByRole('button', { name: /deal/i })
     userEvent.click(drawDealButton)
     userEvent.click(drawDealButton)
-    const reward = getByText(/reward: $/i)
-    const rewardAmount = Number(reward.textContent!.split('$')[1])
+    const reward = getByText(/reward:/i)
+    const rewardAmount = Number(reward.textContent!.split(' ')[1])
     const newBankrollAmount = Number(bankroll.textContent!.split('$')[1])
-    expect(newBankrollAmount).toBe(999 + rewardAmount)
+    waitFor(() => expect(newBankrollAmount).toBe(bankrollValue + rewardAmount))
 })

@@ -1,33 +1,35 @@
 import Image from 'next/image'
+import PlayingCardModel from '../models/playing-card'
 
-interface PlayingCardProps {
-    flipped?: boolean;
-    suit: string;
-    rank: string;
-    onHold?: boolean;
-    disabled?: boolean;
+interface PlayingCardProps extends PlayingCardModel {
+    onClick: () => void;
 }
 
 export default function PlayingCard({
     flipped,
     suit,
     rank,
-    onHold,
-    disabled
+    held,
+    disabled,
+    onClick
 }: PlayingCardProps) {
     let color = (suit === 'clubs' || suit === 'spades') ? 'text-black' : 'text-red'
     return (
         <div 
             data-testid='playing-card'
-            className={`relative flex justify-center items-center bg-white
-                rounded-xl h-[275px] w-[200px] cursor-pointer hover:shadow`}>
-            {onHold && (
-                <div>
+            className={`relative flex justify-center items-center
+                ${flipped ? 'bg-gradient-to-b from-green-dark to-green border-4' 
+                : 'bg-white'}
+                ${!disabled && !flipped && 'cursor-pointer hover:shadow' }
+                rounded-xl h-[275px] w-[200px] `}
+                onClick={onClick}>
+            {held && (
+                <div className='absolute w-full text-3xl bg-green-dark opacity-80 text-green-light z-10'>
                     HOLD
                 </div>
             )}
             {flipped ? (
-                <div>
+                <div className='text-4xl absolute bottom-5 left-2'>
                     eCASINO
                 </div>
             ) : (

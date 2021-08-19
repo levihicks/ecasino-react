@@ -5,7 +5,7 @@ import VideoPoker from '../pages/video-poker'
 test('betting button functionality', () => {
     const { getByRole } = render(<VideoPoker />)
     const betOneButton = getByRole('button', { name: /bet one/i })
-    const betAmount = getByRole('heading', {name: /bet :/i})
+    const betAmount = getByRole('heading', {name: /bet: /i})
     expect(betAmount).toHaveTextContent('1')
     userEvent.click(betOneButton)
     expect(betAmount).toHaveTextContent('2')
@@ -16,18 +16,20 @@ test('betting button functionality', () => {
     expect(betAmount).toHaveTextContent('1')
 })
 
-test('drawing and dealing functionality', () => {
+test.only('drawing and dealing functionality', async () => {
     const { getByRole, getAllByTestId } = render(<VideoPoker />)
-    const cards = getAllByTestId('playing-card')
+    let cards = getAllByTestId('playing-card')
     expect(cards).toHaveLength(5);
     expect(cards[0]).toHaveTextContent('eCASINO')
-    const drawDealButton = getByRole('button', { name: /draw/i })
+    const drawDealButton = getByRole('button', { name: /deal/i })
     userEvent.click(drawDealButton)
+    cards = getAllByTestId('playing-card')
     expect(cards[0]).not.toHaveTextContent('eCASINO')
     userEvent.click(cards[0])
     userEvent.click(drawDealButton)
     expect(cards[0]).toHaveTextContent('HOLD')
     userEvent.click(drawDealButton)
+    cards = getAllByTestId('playing-card')
     expect(cards[0]).not.toHaveTextContent('HOLD')
 })
 

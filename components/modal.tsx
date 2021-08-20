@@ -7,7 +7,8 @@ interface ModalProps {
 
 export default function Modal({ children, closeModal }: ModalProps) {
     return (
-        <div className={`absolute bg-green p-10 text-xl rounded-2xl 
+        <div 
+            className={`absolute bg-green p-10 text-xl rounded-2xl 
             border-4 border-green-light opacity-90 z-20`}>
             {children}
             {closeModal && (

@@ -1,8 +1,8 @@
-import { render } from '../utils/test-utils'
+import { render, waitFor } from '../utils/test-utils'
 import userEvent from "@testing-library/user-event"
 import LiarsDice from '../pages/liars-dice'
 
-test('gameplay round behavior', () => {
+test('gameplay round behavior', async () => {
     const { getByRole, getAllByAltText, queryByText, getByText } = render(<LiarsDice />)
     const newGameButton = getByRole('button', { name: /new game/i })
     userEvent.click(newGameButton)
@@ -16,10 +16,8 @@ test('gameplay round behavior', () => {
         userEvent.click(bidButton)
         roundOverModalText = queryByText('wins.', {exact: false})
     }
-    const userWins = Boolean(queryByText('User wins.', {exact: false})) 
-    // check later if exact is necessary
+    const userWins = Boolean(queryByText('User wins.'))
     const closeModalButton = getByText('Okay')
     userEvent.click(closeModalButton)
-    expect(userWins ? opponentDice.length : userDice.length).toEqual(4) 
-    // might need to reinitialize those variables
+    waitFor(() => expect(userWins ? opponentDice : userDice).toHaveLength(4))
 })

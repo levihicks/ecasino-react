@@ -1,8 +1,15 @@
 import Link from "next/link"
+import Image from 'next/image'
 import { useAppSelector } from "../hooks/typedReduxHooks"
 import { selectCount } from "../store/bankrollSlice"
 
-export default function Header({ text, home }: { text: string, home?: boolean }) {
+interface HeaderProps {
+    text: string;
+    home?: boolean;
+    imageFilename?: string;
+}
+
+export default function Header({ text, home, imageFilename }: HeaderProps) {
     const bankrollValue = useAppSelector(selectCount)
 
     return ( 
@@ -14,7 +21,12 @@ export default function Header({ text, home }: { text: string, home?: boolean })
                     </a>
                 </Link>
             )}
-            <h1 className='py-8 text-4xl'>{text}</h1>
+            <h1 className='py-8 text-4xl'>
+                {text}{' '}
+                {imageFilename && (
+                    <Image src={`/${imageFilename}.png`} alt='' height={25} width={25} />
+                )}
+            </h1>
             {!home && (
                 <div>Bankroll: ${bankrollValue}</div>
             )}

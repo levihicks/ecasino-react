@@ -75,7 +75,7 @@ export default function VideoPoker() {
 
     return (
         <div>
-            <Header text='Video Poker' />
+            <Header text='Video Poker' imageFilename='video-poker-image' />
             <div className='flex w-full justify-around items-center m-auto mb-[50px] max-w-screen-xl'>
                 {cards.map((c, i) => {
                     return (

@@ -9,6 +9,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <meta name="description" content="Created by Levi Hicks" />
             <link rel="icon" href="/favicon.ico" />
             <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet" />
+            <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"></link>
             </Head>
             <div className='bg-black min-h-screen text-center text-white'>
                 {children}

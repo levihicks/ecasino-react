@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'sans': ['Nunito', 'sans-serif'],
+        'retro': ['\'Press Start 2P\'', 'serif']
       },
       colors: {
         'black': '#001207',
@@ -16,7 +17,8 @@ module.exports = {
         'red': '#FF0000',
         'red-dark': '#cc0000',
         'gray': '#839595',
-        'pink': '#ff6666',
+        'pink': '#FF6666',
+        'yellow': '#FFE971'
       },
       boxShadow: {
         DEFAULT: '0 0 50px rgba(4, 232, 36, 1)',

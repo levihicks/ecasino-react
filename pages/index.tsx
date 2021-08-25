@@ -37,7 +37,7 @@ const Home: NextPage = () => {
           <a>
             <MenuOption>
               <Image src='/liars-dice-image.png' alt='' height={200} width={200} />
-              <MenuOptionLink>Liar's Dice</MenuOptionLink>
+              <MenuOptionLink>Liar&apos;s dice</MenuOptionLink>
             </MenuOption>
           </a>
         </Link>

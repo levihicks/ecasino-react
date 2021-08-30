@@ -22,6 +22,30 @@ module.exports = {
       },
       boxShadow: {
         DEFAULT: '0 0 50px rgba(4, 232, 36, 1)',
+      },
+      keyframes: {
+        floatToBottomLeft: {
+          '0%': { top: '-100%', right: '-50%', },
+          '100%': { top: '100%', right: '100%' }
+        },
+        floatToBottomRight: {
+          '0%': { top: '-100%', left: '-50%', },
+          '100%': { top: '100%', left: '100%' }
+        },
+        floatToTopRight: {
+          '0%': { top: '100%', left: '-50%', },
+          '100%': { top: '-100%', left: '100%' }
+        },
+        expand: {
+          '100%': { transform: 'scale(1.05)' }
+        }
+      },
+      animation: {
+        'float-bl': 'floatToBottomLeft 8s linear infinite',
+        'float-br': 'floatToBottomRight 10s linear infinite',
+        'float-tr': 'floatToTopRight 6s linear infinite',
+        'expand': 'expand 0.2s linear 1 forwards'
+        
       }
     },
   },

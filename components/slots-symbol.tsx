@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTransition, animated, config } from 'react-spring'
 import Image from 'next/image'
 import { SYMBOLS } from '../constants/slots-symbols'
@@ -31,7 +31,7 @@ export default function SlotsSymbol({ symbol, leaving, afterSpin, justMounted }:
                 src={`/slots/${SYMBOLS[symbol === 0 ? 6 : symbol - 1]}.png`} 
                 alt=''
                 width={140}
-                height={140}  />
+                height={140} />
         </animated.div>
         ) : (
             <animated.div style={{
@@ -43,7 +43,7 @@ export default function SlotsSymbol({ symbol, leaving, afterSpin, justMounted }:
                     src={`/slots/${SYMBOLS[symbol]}.png`} 
                     alt=''
                     width={140}
-                    height={140}  />
+                    height={140} />
             </animated.div>
         )}</>
     ))

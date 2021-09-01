@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import Header from '../components/header'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
 const MenuOption = ({children}: {children: ReactNode}) => (
   <div className='group hover:animate-expand'>{children}</div>
@@ -13,6 +13,7 @@ const MenuOptionLink = ({children}: {children: ReactNode}) => (
 )
 
 const Home: NextPage = () => {
+
   return (
     <>
       <div>

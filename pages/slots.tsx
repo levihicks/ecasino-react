@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
+import Image from 'next/image'
 import Button from "../components/button"
 import Header from "../components/header"
 import SlotsLights from "../components/slots-lights"
 import SlotsSymbol from "../components/slots-symbol"
+import Modal from "../components/modal"
+import Payouts from '../components/payouts'
 import { getPayoutMultiplier } from '../utils/slots-payouts'
 import { SYMBOLS } from '../constants/slots-symbols'
 import { useAppDispatch } from "../hooks/typedReduxHooks"
@@ -15,6 +18,7 @@ export default function Slots() {
     const [currentSymbols, setCurrentSymbols] = useState<number[]>([1, 2, 3])
     const [newSymbols, setNewSymbols] = useState<number[]>([1, 2, 3])
     const [gameStarted, setGameStarted] = useState(false)
+    const [payoutsDisplayed, setPayoutsDisplayed] = useState(false)
     const dispatch = useAppDispatch()
 
     const newSpin = () => {
@@ -55,7 +59,7 @@ export default function Slots() {
         <div>
             <Header text='Slots' imageFilename='slots-image' />
             <div className={`bg-gradient-to-b from-green to-black
-                rounded-t-[95px] w-[720px] h-[400px] m-auto pt-4`}>
+                rounded-t-[95px] w-[720px] h-[400px] m-auto pt-4 flex flex-col items-center`}>
                 <div className='flex justify-center items-center'>
                     <SlotsLights />
                     <div className='text-red bg-black rounded-full py-1 px-3 w-[300px] mx-1 font-retro'>
@@ -87,24 +91,35 @@ export default function Slots() {
                         </div>
                     ))}
                 </div>
-                <div className='flex justify-around'>
+                <div className='flex justify-center flex-wrap'>
                     <Button 
-                        extraStyles='min-w-[200px]' 
+                        extraStyles='min-w-[45%] m-1' 
                         text='BET ONE' 
                         onClick={() => setNewBet(bet === 5 ? 1 : bet + 1)}
-                        disabled={spinning} />
+                        disabled={payoutsDisplayed || spinning} />
                     <Button 
-                        extraStyles='min-w-[200px]' 
+                        extraStyles='min-w-[45%] m-1' 
                         text='BET MAX' 
                         onClick={() => setNewBet(5)}
-                        disabled={spinning} />
+                        disabled={payoutsDisplayed || spinning} />
                     <Button 
-                        extraStyles='min-w-[200px]' 
+                        extraStyles='min-w-[45%] m-1' 
                         text='SPIN' 
                         onClick={newSpin}
+                        disabled={payoutsDisplayed || spinning} />
+                    <Button 
+                        extraStyles='min-w-[45%] m-1' 
+                        text={`${payoutsDisplayed ? 'HIDE' : 'SHOW'} PAYOUTS`}
+                        onClick={() => {setPayoutsDisplayed(val => !val)}}
                         disabled={spinning} />
                 </div>
+                {payoutsDisplayed && (
+                    <Modal>
+                        <Payouts />
+                    </Modal>
+                )}
             </div>
+            
         </div>
     )
 }

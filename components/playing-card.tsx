@@ -13,6 +13,7 @@ export default function PlayingCard({
     disabled,
     onClick
 }: PlayingCardProps) {
+    let suitsObj: any = { spades: '♠️', clubs: '♣️', diamonds: '♦️', hearts: '♥️' }
     let color = (suit === 'clubs' || suit === 'spades') ? 'text-black' : 'text-red'
     return (
         <div 
@@ -42,12 +43,8 @@ export default function PlayingCard({
                     right-5 bottom-5 -rotate-180`}>
                         {rank}
                     </div>
-                    <div>
-                        <Image 
-                            src={`/${suit}.png`} 
-                            alt=''
-                            height='80'
-                            width='80' />
+                    <div className={`${color} text-8xl`}>
+                        {suitsObj[suit]}
                     </div>
                 </div>
             )}

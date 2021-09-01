@@ -193,26 +193,26 @@ export default function LiarsDice() {
                         <Die 
                             key={String(d)+String(i)} 
                             value={roundEnded ? d : 0} 
-                            size={30} 
-                            altText='opponent die'
+                            size={40}
+                            testId='opponent die'
                         />
                     )}
                 </div>
                 <hr className='max-w-sm my-2 m-auto' />
-                {opponentMove && (<div className={'text-xl text-green-light flex justify-center'}>
-                    Opponent bids {opponentMove.countBid} <Die value={opponentMove.faceBid} size={30} />
+                {opponentMove && (<div className={'text-xl text-green-light flex justify-center items-center'}>
+                    Opponent bids {opponentMove.countBid} <Die value={opponentMove.faceBid} size={40} />
                 </div>)}
             </div>)}
             <div className='flex justify-center items-center my-6'>
                 {userDice.map((d, i) => 
-                    <Die key={String(d)+String(i)} value={d} altText='user die' />)}
+                    <Die key={String(d)+String(i)} value={d} testId='user die' />)}
                 {(roundEnded && !messageClosed) && (
                     <Modal closeModal={closeMessage}>
                         {!gameWinner && result ? (
                             <>
                                 <div>{result.bluffCaller} calls a bluff.</div>
-                                <div className='flex justify-center'>
-                                    Found {result.wagedCount} <div><Die value={lastBid.faceBid} size={30} /></div>
+                                <div className='flex justify-center items-center'>
+                                    Found {result.wagedCount} <div><Die value={lastBid.faceBid} size={40} /></div>
                                 </div>
                                 <div>Wager was {result.wagerValid ? 'valid' : 'invalid'}.</div>
                                 <div>{result.winner} wins.</div>

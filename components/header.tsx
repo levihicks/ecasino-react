@@ -8,7 +8,7 @@ interface HeaderProps {
     home?: boolean;
 }
 
-export default function Header({ text, home, imageFilename }: HeaderProps) {
+export default function Header({ text, home }: HeaderProps) {
     const bankrollValue = useAppSelector(selectCount)
 
     return ( 

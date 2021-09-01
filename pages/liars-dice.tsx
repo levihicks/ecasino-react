@@ -185,7 +185,7 @@ export default function LiarsDice() {
 
     return (
         <div>
-            <Header text={'Liar\'s Dice'} imageFilename={'liars-dice-image'} />
+            <Header text={'Liar\'s Dice'} />
             {gameStarted && (<div>
                 <div className='text-green-light py-2'>Opponent</div>
                 <div className='flex justify-center'>

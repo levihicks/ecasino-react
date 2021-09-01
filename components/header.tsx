@@ -6,7 +6,6 @@ import { selectCount } from "../store/bankrollSlice"
 interface HeaderProps {
     text: string;
     home?: boolean;
-    imageFilename?: string;
 }
 
 export default function Header({ text, home, imageFilename }: HeaderProps) {
@@ -22,10 +21,7 @@ export default function Header({ text, home, imageFilename }: HeaderProps) {
                 </Link>
             )}
             <h1 className='py-8 text-4xl'>
-                {text}{' '}
-                {imageFilename && (
-                    <Image src={`/${imageFilename}.png`} alt='' height={25} width={25} />
-                )}
+                {text}
             </h1>
             {!home && (
                 <div>Bankroll: ${bankrollValue}</div>

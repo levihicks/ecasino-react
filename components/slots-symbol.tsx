@@ -11,6 +11,8 @@ interface SlotsSymbolProps {
 }
 
 export default function SlotsSymbol({ symbol, leaving, afterSpin, justMounted }: SlotsSymbolProps) {
+
+    const slotsObj = ['🍫', '🔔', '🍒', '🍇', '🍋', '🍊', '🍍']
     
     const transitions = useTransition(symbol, {
         from: { position: 'absolute', x: leaving ? '0px' : '-250px' },
@@ -27,11 +29,7 @@ export default function SlotsSymbol({ symbol, leaving, afterSpin, justMounted }:
             transform: x
                 .to(val => 
                 `translateY(${val})`)}}>
-            <Image 
-                src={`/slots/${SYMBOLS[symbol === 0 ? 6 : symbol - 1]}.png`} 
-                alt=''
-                width={140}
-                height={140} />
+            <div className='text-8xl'>{slotsObj[symbol === 0 ? 6 : symbol - 1]}</div>
         </animated.div>
         ) : (
             <animated.div style={{
@@ -39,11 +37,7 @@ export default function SlotsSymbol({ symbol, leaving, afterSpin, justMounted }:
                 transform: x
                     .to(val => 
                     `translateY(${val})`)}}>
-                <Image 
-                    src={`/slots/${SYMBOLS[symbol]}.png`} 
-                    alt=''
-                    width={140}
-                    height={140} />
+                <div className='text-8xl'>{slotsObj[symbol]}</div>
             </animated.div>
         )}</>
     ))

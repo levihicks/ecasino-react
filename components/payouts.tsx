@@ -12,69 +12,56 @@ export default function Payouts() {
         <div className='flex flex-col'>
             <div className='text-xl'>Payouts</div>
             <PayoutRow>
-                <Image src={'/slots/cherry.png'} alt='' height={20} width={20} />
+                <div>
+                    🍒
+                </div>
                 BET x 1
             </PayoutRow>
             <PayoutRow>
                 <div>
-                    <Image src={'/slots/cherry.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/cherry.png'} alt='' height={20} width={20} />
+                    🍒🍒
                 </div>
                 BET x 5
             </PayoutRow>
             <PayoutRow>
                 <div>
-                    <Image src={'/slots/cherry.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/cherry.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/cherry.png'} alt='' height={20} width={20} />
+                    🍒🍒🍒
                 </div>
                 BET x 10
             </PayoutRow>
             <PayoutRow>
                 <div>
-                    <Image src={'/slots/bell.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/bell.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/bell.png'} alt='' height={20} width={20} />
+                    🔔🔔🔔
                 </div>
                 BET x 10
             </PayoutRow>
             <PayoutRow>
                 <div>
-                    <Image src={'/slots/bar.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/bar.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/bar.png'} alt='' height={20} width={20} />
+                    🍫🍫🍫
                 </div>
                 BET x 20
             </PayoutRow>
             <PayoutRow>
                 <div>
-                    <Image src={'/slots/seven.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/seven.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/seven.png'} alt='' height={20} width={20} />
+                    🍍🍍🍍
                 </div>
                 BET x 30
             </PayoutRow>
             <PayoutRow>
                 <div>
-                    <Image src={'/slots/lemon.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/lemon.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/lemon.png'} alt='' height={20} width={20} />
+                    🍋🍋🍋
                 </div>
                 BET x 40
             </PayoutRow>
             <PayoutRow>
                 <div>
-                    <Image src={'/slots/grapes.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/grapes.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/grapes.png'} alt='' height={20} width={20} />
+                    🍇🍇🍇
                 </div>
                 BET x 60
             </PayoutRow>
             <PayoutRow>
                 <div>
-                    <Image src={'/slots/orange.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/orange.png'} alt='' height={20} width={20} />
-                    <Image src={'/slots/orange.png'} alt='' height={20} width={20} />
+                    🍊🍊🍊
                 </div>
                 BET x 100
             </PayoutRow>

@@ -57,7 +57,7 @@ export default function Slots() {
 
     return (
         <div>
-            <Header text='Slots' imageFilename='slots-image' />
+            <Header text='Slots' />
             <div className={`bg-gradient-to-b from-green to-black
                 rounded-t-[95px] w-[720px] h-[400px] m-auto pt-4 flex flex-col items-center`}>
                 <div className='flex justify-center items-center'>

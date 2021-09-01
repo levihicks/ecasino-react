@@ -23,11 +23,11 @@ const Home: NextPage = () => {
       </div>
       <div className='relative'>
         <Header text='eCASINO' home />
-        <div className='flex justify-around my-24'>
+        <div className='flex justify-around my-24 max-w-2xl m-auto'>
           <Link href='/video-poker'>
             <a>
               <MenuOption>
-                <Image src='/video-poker-image.png' alt='' height={200} width={200} />
+                <div className='text-9xl'>🃏</div>
                 <MenuOptionLink>Video Poker</MenuOptionLink>
               </MenuOption>
             </a>
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
           <Link href='/slots'>
             <a>
               <MenuOption>
-                <Image src='/slots-image.png' alt='' height={200} width={200} />
+                <div className='text-9xl'>🎰</div>
                 <MenuOptionLink>Slots</MenuOptionLink>
               </MenuOption>
             </a>
@@ -43,7 +43,7 @@ const Home: NextPage = () => {
           <Link href='/liars-dice'>
             <a>
               <MenuOption>
-                <Image src='/liars-dice-image.png' alt='' height={200} width={200} />
+                <div className='text-9xl'>🎲</div>
                 <MenuOptionLink>Liar&apos;s Dice</MenuOptionLink>
               </MenuOption>
             </a>

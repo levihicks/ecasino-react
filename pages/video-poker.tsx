@@ -56,7 +56,7 @@ export default function VideoPoker() {
             setCards(newCards)
         }
         setRoundEnded(true)
-        const newHighestHand = getHighestHand(newCards)
+        const newHighestHand = getHighestHand(heldCards.length < 5 ? newCards : heldCards)
         dispatch(increment(bet * newHighestHand.reward ))
         setHighestHand(newHighestHand)
     }

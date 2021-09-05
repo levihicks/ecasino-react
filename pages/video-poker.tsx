@@ -4,7 +4,6 @@ import PlayingCard from "../components/playing-card"
 import Button from '../components/button'
 import PlayingCardModel from '../models/playing-card'
 import getHighestHand from '../utils/poker-hands'
-import { RANKS, SUITS } from '../constants/card-values'
 import Modal from "../components/modal"
 import { useAppDispatch, } from "../hooks/typedReduxHooks"
 import { increment, decrement, } from '../store/bankrollSlice'
@@ -76,7 +75,7 @@ export default function VideoPoker() {
     return (
         <div>
             <Header text='Video Poker' />
-            <div className='flex w-full justify-around items-center m-auto mb-[50px] max-w-screen-xl'>
+            <div className='flex flex-wrap w-full justify-center items-center m-auto max-w-screen-xl'>
                 {cards.map((c, i) => {
                     return (
                         <PlayingCard 
@@ -92,13 +91,15 @@ export default function VideoPoker() {
                 })}
                 {highestHand && (
                     <Modal>
-                        {highestHand.result}
-                        <p>Reward: { bet * highestHand.reward }</p>
+                        <div>
+                            {highestHand.result}
+                            <p>Reward: { bet * highestHand.reward }</p>
+                        </div>
                     </Modal>
                 )}
             </div>
-            <div className='max-w-screen-lg m-auto'>
-                <h3 className='text-3xl text-left'>BET: ${bet}</h3>
+            <div className='max-w-screen-lg m-auto px-3'>
+                <h3 className='sm:text-3xl text-left'>BET: ${bet}</h3>
                 <div className='max-w-screen-lg flex justify-between'>
                     <Button 
                         disabled={roundEnded === false} 

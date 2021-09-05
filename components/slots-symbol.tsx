@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react'
 import { useTransition, animated, config } from 'react-spring'
-import Image from 'next/image'
-import { SYMBOLS } from '../constants/slots-symbols'
 
 interface SlotsSymbolProps {
     symbol: number;
@@ -22,14 +19,14 @@ export default function SlotsSymbol({ symbol, leaving, afterSpin, justMounted }:
         immediate: justMounted
     })
     
-    return transitions(({ x }, item) => (
+    return transitions(({ x }) => (
         <>{leaving ? (
         <animated.div style={{
             position: 'absolute',
             transform: x
                 .to(val => 
                 `translateY(${val})`)}}>
-            <div className='text-8xl'>{slotsObj[symbol === 0 ? 6 : symbol - 1]}</div>
+            <div className='text-4xl sm:text-8xl'>{slotsObj[symbol === 0 ? 6 : symbol - 1]}</div>
         </animated.div>
         ) : (
             <animated.div style={{
@@ -37,7 +34,7 @@ export default function SlotsSymbol({ symbol, leaving, afterSpin, justMounted }:
                 transform: x
                     .to(val => 
                     `translateY(${val})`)}}>
-                <div className='text-8xl'>{slotsObj[symbol]}</div>
+                <div className='text-4xl sm:text-8xl'>{slotsObj[symbol]}</div>
             </animated.div>
         )}</>
     ))

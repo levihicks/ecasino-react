@@ -1,5 +1,4 @@
 import { ReactNode, useEffect, useState } from "react"
-import Image from 'next/image'
 import Button from "../components/button"
 import Header from "../components/header"
 import SlotsLights from "../components/slots-lights"
@@ -59,10 +58,10 @@ export default function Slots() {
         <div>
             <Header text='Slots' />
             <div className={`bg-gradient-to-b from-green to-black
-                rounded-t-[95px] w-[720px] h-[400px] m-auto pt-4 flex flex-col items-center`}>
+                rounded-t-[55px] sm:rounded-t-[95px] w-[300px] h-[170px] sm:w-[720px] sm:h-[400px] m-auto pt-4 flex flex-col items-center`}>
                 <div className='flex justify-center items-center'>
                     <SlotsLights />
-                    <div className='text-red bg-black rounded-full py-1 px-3 w-[300px] mx-1 font-retro'>
+                    <div className='text-[9px] sm:text-xl text-red bg-black rounded-full py-1 px-3 w-[140px] sm:w-[300px] mx-1 font-retro'>
                         {spinning ? 'SPINNING...' 
                             :reward !== null
                             ? `REWARD: $${String(reward)}`
@@ -75,7 +74,7 @@ export default function Slots() {
                         <div 
                             key={i}
                             className={`relative flex items-center justify-center overflow-hidden
-                                h-[300px] w-[150px] my-4 mx-2 rounded-xl 
+                                h-[140px] w-[70px] sm:h-[300px] sm:w-[150px] my-4 mx-2 rounded-xl 
                                 bg-gradient-to-b from-yellow to-white`}>
                                 <>
                                     <SlotsSymbol 

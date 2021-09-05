@@ -12,19 +12,19 @@ export default function Header({ text, home }: HeaderProps) {
     const bankrollValue = useAppSelector(selectCount)
 
     return ( 
-        <header className='flex justify-around items-center space-around'>
+        <header className='flex justify-around items-center'>
             {!home && (
                 <Link href='/'>
-                    <a className='text-green-dark hover:text-green-light' >
+                    <a className='text-green-dark hover:text-green-light text-sm sm:text-lg  w-1/4' >
                         eCASINO
                     </a>
                 </Link>
             )}
-            <h1 className='py-8 text-4xl'>
+            <h1 className='py-4 sm:py-8 text-lg sm:text-4xl w-1/4'>
                 {text}
             </h1>
             {!home && (
-                <div>Bankroll: ${bankrollValue}</div>
+                <div className='text-sm sm:text-lg w-1/4'>Bankroll: ${bankrollValue}</div>
             )}
         </header>
     )

@@ -20,6 +20,8 @@ interface Result {
     winner: Player;
 }
 
+const buttonStyles = 'w-full sm:w-[48%] mt-1 sm:m-1'
+
 export default function LiarsDice() {
     const [ante, setAnte] = useState(1)
     const [gameStarted, setGameStarted] = useState(false)
@@ -193,26 +195,30 @@ export default function LiarsDice() {
                         <Die 
                             key={String(d)+String(i)} 
                             value={roundEnded ? d : 0} 
-                            size={40}
+                            extraStyles='h-[40px] w-[40px]'
                             testId='opponent die'
                         />
                     )}
                 </div>
                 <hr className='max-w-sm my-2 m-auto' />
-                {opponentMove && (<div className={'text-xl text-green-light flex justify-center items-center'}>
-                    Opponent bids {opponentMove.countBid} <Die value={opponentMove.faceBid} size={40} />
+                {opponentMove && (<div className={'sm:text-xl text-green-light flex justify-center items-center'}>
+                    Opponent bids {opponentMove.countBid} <Die value={opponentMove.faceBid} extraStyles='h-[40px] w-[40px]' />
                 </div>)}
             </div>)}
-            <div className='flex justify-center items-center my-6'>
+            <div className='flex justify-center items-center my-2'>
                 {userDice.map((d, i) => 
-                    <Die key={String(d)+String(i)} value={d} testId='user die' />)}
+                    <Die 
+                        key={String(d)+String(i)} 
+                        value={d} 
+                        extraStyles='h-[50px] w-[50px] sm:h-[125px] sm:w-[125px]' 
+                        testId='user die' />)}
                 {(roundEnded && !messageClosed) && (
                     <Modal closeModal={closeMessage}>
                         {!gameWinner && result ? (
                             <>
                                 <div>{result.bluffCaller} calls a bluff.</div>
                                 <div className='flex justify-center items-center'>
-                                    Found {result.wagedCount} <div><Die value={lastBid.faceBid} size={40} /></div>
+                                    Found {result.wagedCount} <div><Die value={lastBid.faceBid} extraStyles='h-[40px] w-[40px]' /></div>
                                 </div>
                                 <div>Wager was {result.wagerValid ? 'valid' : 'invalid'}.</div>
                                 <div>{result.winner} wins.</div>
@@ -226,8 +232,8 @@ export default function LiarsDice() {
                 )}
             </div>
             
-            <div className='flex items-center justify-between max-w-screen-md m-auto'>
-                <div className='text-3xl'>ANTE: ${ante}</div>
+            <div className='flex items-center justify-around px-1 max-w-screen-md m-auto'>
+                <div className='sm:text-3xl'>ANTE: ${ante}</div>
                 {(gameStarted && !roundEnded) && <div className='flex'>
                     <div className='flex flex-col items-center justify-between'>
                         <button 
@@ -235,7 +241,7 @@ export default function LiarsDice() {
                             onClick={() => shiftFaceBid(1)}>
                             +
                         </button>
-                        <div className='my-3'><Die value={currentBid.faceBid} size={40}/></div>
+                        <div className='my-3'><Die value={currentBid.faceBid} extraStyles='h-[40px] w-[40px]'/></div>
                         <button 
                             className='h-8 w-8 bg-green-dark rounded-3xl text-black hover:bg-green-light text-2xl'
                             onClick={() => shiftFaceBid(-1)}>
@@ -258,29 +264,29 @@ export default function LiarsDice() {
                         </button>
                     </div>
                 </div>}
-                <div className='flex flex-wrap w-[60%]'>
+                <div className='flex flex-col sm:flex-row sm:flex-wrap sm:w-[60%] justify-center'>
                     {(roundEnded || !gameStarted) ? (
                         <Button 
-                            extraStyles='w-[48%] m-1' 
+                            extraStyles={buttonStyles} 
                             text={gameStarted ? 'NEW ROUND' : 'NEW GAME'} 
                             onClick={startNewRound} />) : (
                         <Button 
-                            extraStyles='w-[48%] m-1'
+                            extraStyles={buttonStyles}
                             text='BID'
                             onClick={() => bid(currentBid)} />
                     )}
                     <Button 
-                        extraStyles='w-[48%] m-1' 
+                        extraStyles={buttonStyles} 
                         text='CALL BLUFF' 
                         onClick={() =>{ if (opponentMove) callBluff(opponentMove)}}
                         disabled={roundEnded || !opponentMove || !gameStarted} />
                     <Button 
-                        extraStyles='w-[48%] m-1' 
+                        extraStyles={buttonStyles} 
                         text='INCREASE ANTE' 
                         onClick={() => setAnte(a => a === 5 ? 1 : a + 1)}
                         disabled={gameStarted} />
                     <Button 
-                        extraStyles='w-[48%] m-1'
+                        extraStyles={buttonStyles}
                         text='MAX ANTE' 
                         onClick={() => setAnte(5)}
                         disabled={gameStarted} />

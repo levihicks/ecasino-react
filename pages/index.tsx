@@ -1,15 +1,14 @@
 import type { NextPage } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import Header from '../components/header'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, } from 'react'
 
 const MenuOption = ({children}: {children: ReactNode}) => (
-  <div className='group hover:animate-expand'>{children}</div>
+  <div className='group hover:animate-expand mt-4 '>{children}</div>
 )
 
 const MenuOptionLink = ({children}: {children: ReactNode}) => (
-  <div className='relative text-3xl text-white group-hover:text-green-light my-3'>{children}</div>
+  <div className='relative text-xl sm:text-3xl text-white group-hover:text-green-light my-3'>{children}</div>
 )
 
 const Home: NextPage = () => {
@@ -23,7 +22,7 @@ const Home: NextPage = () => {
       </div>
       <div className='relative'>
         <Header text='eCASINO' home />
-        <div className='flex justify-around my-24 max-w-2xl m-auto'>
+        <div className='flex flex-wrap justify-around sm:mt-24 m-auto max-w-[140px] sm:max-w-2xl'>
           <Link href='/video-poker'>
             <a>
               <MenuOption>

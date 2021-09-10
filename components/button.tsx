@@ -9,9 +9,9 @@ export default function Button({ text, onClick, disabled, extraStyles }: ButtonP
     return (
         <button 
             onClick={() => {if (!disabled) onClick()}}
-            className={`p-1 px-[10px] sm:py-3 sm:px-7 bg-green-dark rounded-xl sm:text-xl 
+            className={`p-1 px-[10px] md:py-3 md:px-7 bg-green-dark rounded-xl md:text-xl 
                 cursor-pointer hover:bg-green disabled:bg-gray
-                disabled:cursor-default max-h-14 ${extraStyles}`}
+                disabled:cursor-default min-h-14 ${extraStyles}`}
             disabled={disabled}>
             {text}
         </button>

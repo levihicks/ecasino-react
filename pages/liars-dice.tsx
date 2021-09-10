@@ -210,7 +210,7 @@ export default function LiarsDice() {
                     <Die 
                         key={String(d)+String(i)} 
                         value={d} 
-                        extraStyles='h-[50px] w-[50px] sm:h-[125px] sm:w-[125px]' 
+                        extraStyles='h-[50px] w-[50px] md:h-[125px] md:w-[125px]' 
                         testId='user die' />)}
                 {(roundEnded && !messageClosed) && (
                     <Modal closeModal={closeMessage}>

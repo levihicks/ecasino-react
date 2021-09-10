@@ -20,7 +20,7 @@ export default function Header({ text, home }: HeaderProps) {
                     </a>
                 </Link>
             )}
-            <h1 className='py-4 sm:py-8 text-lg sm:text-4xl w-1/4'>
+            <h1 className='py-4 text-lg sm:text-4xl w-1/4'>
                 {text}
             </h1>
             {!home && (

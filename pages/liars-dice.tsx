@@ -96,12 +96,15 @@ export default function LiarsDice() {
     }
 
     const opponentBid = (userBid: Move) => {
-        let callBluffProbability = 0.3
         let roll = Math.random()
         let totalDiceCount = userDice.length + opponentDice.length
         let userHitWageCap = userBid.faceBid === 6 
             && userBid.countBid === totalDiceCount
-        if (roll < callBluffProbability || userHitWageCap){
+        const oppDiceMatchingBid = opponentDice.filter(d => userBid.faceBid === d)
+        const userWagerValid = oppDiceMatchingBid.length >= userBid.countBid
+        const userWagerInvalid = (userDice.length + oppDiceMatchingBid.length) < userBid.countBid
+        let callBluffProbability = 0.3 + (userBid.countBid * .02 - oppDiceMatchingBid.length * .02)
+        if ((roll < callBluffProbability && !userWagerValid) || userWagerInvalid || userHitWageCap){
             callBluff(userBid, false)
             setUserTurn(false)
         }  
@@ -110,8 +113,9 @@ export default function LiarsDice() {
                 faceBid: userBid.faceBid,
                 countBid: userBid.countBid
             }
-            let wagerProbability = 0.25
+            let wagerProbability = 0
             do {
+                wagerProbability = 0.4
                 if (newOpponentMove.countBid === totalDiceCount) {
                     newOpponentMove = {
                         faceBid: newOpponentMove.faceBid + 1,
@@ -123,6 +127,9 @@ export default function LiarsDice() {
                     if (newOpponentMove.faceBid === 6 
                         && newOpponentMove.countBid === totalDiceCount)
                         break
+                }
+                for (let i = 0; i < newOpponentMove.countBid; i++) {
+                    wagerProbability *= 0.95
                 }
                 roll = Math.random()
             } while (roll > wagerProbability)

@@ -26,7 +26,7 @@ const Home: NextPage = () => {
           <Link href='/video-poker'>
             <a>
               <MenuOption>
-                <div className='text-9xl'>🃏</div>
+                <div className='text-9xl'>📼</div>
                 <MenuOptionLink>Video Poker</MenuOptionLink>
               </MenuOption>
             </a>
@@ -44,6 +44,14 @@ const Home: NextPage = () => {
               <MenuOption>
                 <div className='text-9xl'>🎲</div>
                 <MenuOptionLink>Liar&apos;s Dice</MenuOptionLink>
+              </MenuOption>
+            </a>
+          </Link>
+          <Link href='/blackjack'>
+            <a>
+              <MenuOption>
+                <div className='text-9xl'>🃏</div>
+                <MenuOptionLink>Blackjack</MenuOptionLink>
               </MenuOption>
             </a>
           </Link>

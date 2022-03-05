@@ -24,7 +24,7 @@ export default function Header({ text, home }: HeaderProps) {
                 {text}
             </h1>
             {!home && (
-                <div className='text-sm sm:text-lg w-1/4'>Bankroll: ${bankrollValue}</div>
+                <div className='text-sm sm:text-lg w-1/4'>Bankroll: ${bankrollValue.toFixed(2)}</div>
             )}
         </header>
     )

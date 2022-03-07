@@ -1,4 +1,4 @@
-const convertRankToNum = (v) => {
+export const convertRankToNum = (v) => {
   switch(v) {
     case "J": 
       return "11";

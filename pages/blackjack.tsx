@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '../components/button'
 import Header from '../components/header'
 import PlayingCard from '../components/playing-card'
@@ -7,11 +7,13 @@ import useDeck from '../hooks/useDeck'
 import { useAppDispatch } from '../hooks/typedReduxHooks'
 import { increment, decrement } from '../store/bankrollSlice'
 import {getHandValue} from '../utils/blackjack-hands'
+import Modal from '../components/modal'
 
 export default function Blackjack() {
     const [bet, setBet] = useState(1)
     const [gameStarted, setGameStarted] = useState(false)
-    const [roundEnded, setRoundEnded] = useState<boolean | null>(null)
+    const [dealerTurn, setDealerTurn] = useState<boolean | null>(null)
+    const [resultString, setResultString] = useState<string | null>(null)
     const [dealerCards, setDealerCards] = useState<PlayingCardModel[]>([...new Array(2)].map(
         (el, i) => { return {suit: String(i), rank: String(i)} }
     ))
@@ -24,61 +26,113 @@ export default function Blackjack() {
 
     const deal = () => {
         dispatch(decrement(bet))
+        setResultString(null)
         const newCards = drawFromDeck(4, getShuffledDeck())
         setDealerCards(newCards.splice(0, 2))
         setUserCards(newCards)
         setGameStarted(true)
-        setRoundEnded(false)
+        setDealerTurn(false)
     }
 
     const hit = () => {
         const newCard = drawFromDeck(1, deck)[0]
-        const endRound = getHandValue([...userCards, newCard]) >= 21
+        const dealerTurnOver = getHandValue([...userCards, newCard]) >= 21
         setUserCards(c => [...c, newCard])
-        if (endRound) stand()
+        if (dealerTurnOver) stand()
     }
 
     const stand = () => {
-        setRoundEnded(true)
+        setDealerTurn(true)
+        dealerPlay(dealerCards, deck)
     }
+
+    const dealerPlay = (cards: PlayingCardModel[], currentDeck: PlayingCardModel[]) => {
+        if(getHandValue(cards) < 17) {
+            const updatedDeck = [...currentDeck]
+            const newCard = drawFromDeck(1, updatedDeck)[0]
+            updatedDeck.shift()
+            const dealerTurnOver = getHandValue([...cards, newCard]) >= 17
+            setDealerCards(c => [...c, newCard])
+            if (!dealerTurnOver) setTimeout(() => dealerPlay([...cards, newCard], updatedDeck), 1000)
+            else setDealerTurn(null)
+            
+        } 
+        else setDealerTurn(null)
+    }
+
+    useEffect(() => {
+        if (dealerTurn === null && gameStarted) {
+            let newResultMultiplier = 0
+            if (getHandValue(userCards) === getHandValue(dealerCards))
+                newResultMultiplier = 1
+            else if (getHandValue(userCards) > 21)
+                newResultMultiplier = 0
+            else if (getHandValue(userCards) > getHandValue(dealerCards) || getHandValue(dealerCards) > 21)
+                newResultMultiplier = getHandValue(userCards) === 21 ? 2.5 : 2
+            switch(Number(newResultMultiplier)) {
+                case 0:
+                    setResultString('Dealer wins.')
+                    break
+                case 1:
+                    setResultString('Push.')
+                    break
+                case 2: 
+                    setResultString('User wins.')
+                    break
+                case 2.5:
+                    setResultString('Blackjack!')
+                    break
+                default:
+                    setResultString('This message should not be seen!')
+            }
+            dispatch(increment(newResultMultiplier * bet))
+        }
+    }, [dealerTurn, gameStarted, bet, dealerCards, userCards, dispatch])
 
     return (
         <div>
             <Header text='Blackjack' />
-            <div>
-                <h4 className='text-xl'>Dealer{roundEnded && `: ${getHandValue(dealerCards)}`}</h4>
-                <div className='flex justify-center'>
-                    {dealerCards.map((card, i) => 
-                        <PlayingCard 
-                            key={card.suit + card.rank} 
-                            suit={card.suit} 
-                            rank={card.rank} 
-                            onClick={() => {}}
-                            disabled
-                            flipped={!gameStarted || (i !== 0 && roundEnded === false)} />  
-                    )}
-                </div>
-            </div>
-            <div className='mb-3'>
-                <h4 className='text-xl'>You{roundEnded !== null && `: ${getHandValue(userCards)}`}</h4>
-                <div className='flex justify-center'>
-                    {userCards.map(card => 
+            <div className='relative'>
+                <div>
+                    <h4 className='text-xl'>Dealer{gameStarted && dealerTurn !== false && `: ${getHandValue(dealerCards)}`}</h4>
+                    <div className='flex justify-center'>
+                        {dealerCards.map((card, i) => 
                             <PlayingCard 
                                 key={card.suit + card.rank} 
                                 suit={card.suit} 
                                 rank={card.rank} 
                                 onClick={() => {}}
                                 disabled
-                                flipped={!gameStarted} />
+                                flipped={!gameStarted || (i !== 0 && dealerTurn === false)} />  
                         )}
+                    </div>
                 </div>
+                <div className='mb-3'>
+                    <h4 className='text-xl'>You{dealerTurn !== null && `: ${getHandValue(userCards)}`}</h4>
+                    <div className='flex justify-center'>
+                        {userCards.map(card => 
+                                <PlayingCard 
+                                    key={card.suit + card.rank} 
+                                    suit={card.suit} 
+                                    rank={card.rank} 
+                                    onClick={() => {}}
+                                    disabled
+                                    flipped={!gameStarted} />
+                            )}
+                        {resultString && (
+                            <Modal>{resultString}</Modal>
+                        )}
+                    </div>
+                </div>
+                
             </div>
+            
             <h3 className='sm:text-3xl text-left w-[350px] lg:w-[600px] m-auto'>BET: ${bet}</h3>
             <div className='w-[370px] lg:w-[600px] m-auto'>
                 <div className='flex justify-between'>
-                    <Button text='DEAL' disabled={roundEnded === false} onClick={deal} extraStyles='m-1 flex-grow' />
-                    <Button text='HIT' disabled={!(roundEnded === false)} onClick={hit} extraStyles='m-1 flex-grow' />
-                    <Button text='STAND' disabled={!(roundEnded === false)} onClick={stand} extraStyles='m-1 flex-grow' />
+                    <Button text='DEAL' disabled={dealerTurn === false} onClick={deal} extraStyles='m-1 flex-grow' />
+                    <Button text='HIT' disabled={!(dealerTurn === false)} onClick={hit} extraStyles='m-1 flex-grow' />
+                    <Button text='STAND' disabled={!(dealerTurn === false)} onClick={stand} extraStyles='m-1 flex-grow' />
                 </div>
                 <div className='flex justify-between'>
                     <Button text='DOUBLE DOWN' disabled onClick={() => {}} extraStyles='m-1 flex-grow' />

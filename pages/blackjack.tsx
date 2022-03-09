@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Button from '../components/button'
 import Header from '../components/header'
 import PlayingCard from '../components/playing-card'
@@ -28,22 +28,29 @@ export default function Blackjack() {
         dispatch(decrement(bet))
         setResultString(null)
         const newCards = drawFromDeck(4, getShuffledDeck())
-        setDealerCards(newCards.splice(0, 2))
+        const newDealerCards = newCards.splice(0, 2)
+        setDealerCards(newDealerCards)
         setUserCards(newCards)
         setGameStarted(true)
         setDealerTurn(false)
+        if (getHandValue(newCards) === 21)
+            stand(null, newDealerCards)
     }
 
     const hit = () => {
-        const newCard = drawFromDeck(1, deck)[0]
+        const updatedDeck = [...deck]
+        const newCard = drawFromDeck(1, updatedDeck)[0]
+        updatedDeck.shift()
         const dealerTurnOver = getHandValue([...userCards, newCard]) >= 21
         setUserCards(c => [...c, newCard])
-        if (dealerTurnOver) stand()
+        if (dealerTurnOver) stand([...userCards, newCard], null, updatedDeck)
     }
 
-    const stand = () => {
+    const stand = (uc?: PlayingCardModel[] | null, dc?: PlayingCardModel[] | null, currentDeck?: PlayingCardModel[]) => {
         setDealerTurn(true)
-        dealerPlay(dealerCards, deck)
+        if (getHandValue(uc || userCards) > 21) setDealerTurn(null)
+        else if (getHandValue(dc || dealerCards) < 17) setTimeout(() => dealerPlay(dc || dealerCards, currentDeck || deck), 1000)
+        else dealerPlay(dc || dealerCards, currentDeck || deck)
     }
 
     const dealerPlay = (cards: PlayingCardModel[], currentDeck: PlayingCardModel[]) => {
@@ -60,16 +67,19 @@ export default function Blackjack() {
         else setDealerTurn(null)
     }
 
+    const payout = useCallback((resultMultiplier: number) => 
+        dispatch(increment(resultMultiplier * bet)), [bet, dispatch])
+
     useEffect(() => {
-        if (dealerTurn === null && gameStarted) {
+        if (dealerTurn === null && gameStarted && resultString === null) {
             let newResultMultiplier = 0
             if (getHandValue(userCards) === getHandValue(dealerCards))
                 newResultMultiplier = 1
             else if (getHandValue(userCards) > 21)
                 newResultMultiplier = 0
             else if (getHandValue(userCards) > getHandValue(dealerCards) || getHandValue(dealerCards) > 21)
-                newResultMultiplier = getHandValue(userCards) === 21 ? 2.5 : 2
-            switch(Number(newResultMultiplier)) {
+                newResultMultiplier = (getHandValue(userCards) === 21 && userCards.length === 2) ? 2.5 : 2
+            switch(newResultMultiplier) {
                 case 0:
                     setResultString('Dealer wins.')
                     break
@@ -85,9 +95,9 @@ export default function Blackjack() {
                 default:
                     setResultString('This message should not be seen!')
             }
-            dispatch(increment(newResultMultiplier * bet))
+            payout(newResultMultiplier)
         }
-    }, [dealerTurn, gameStarted, bet, dealerCards, userCards, dispatch])
+    }, [dealerTurn, gameStarted, dealerCards, userCards, payout, resultString])
 
     return (
         <div>
@@ -108,7 +118,7 @@ export default function Blackjack() {
                     </div>
                 </div>
                 <div className='mb-3'>
-                    <h4 className='text-xl'>You{dealerTurn !== null && `: ${getHandValue(userCards)}`}</h4>
+                    <h4 className='text-xl'>You{gameStarted && `: ${getHandValue(userCards)}`}</h4>
                     <div className='flex justify-center'>
                         {userCards.map(card => 
                                 <PlayingCard 
@@ -124,20 +134,42 @@ export default function Blackjack() {
                         )}
                     </div>
                 </div>
-                
             </div>
-            
             <h3 className='sm:text-3xl text-left w-[350px] lg:w-[600px] m-auto'>BET: ${bet}</h3>
             <div className='w-[370px] lg:w-[600px] m-auto'>
                 <div className='flex justify-between'>
-                    <Button text='DEAL' disabled={dealerTurn === false} onClick={deal} extraStyles='m-1 flex-grow' />
-                    <Button text='HIT' disabled={!(dealerTurn === false)} onClick={hit} extraStyles='m-1 flex-grow' />
-                    <Button text='STAND' disabled={!(dealerTurn === false)} onClick={stand} extraStyles='m-1 flex-grow' />
+                    <Button 
+                        text='DEAL' 
+                        disabled={dealerTurn !== null} 
+                        onClick={deal} 
+                        extraStyles='m-1 flex-grow' />
+                    <Button 
+                        text='HIT' 
+                        disabled={!(dealerTurn === false)} 
+                        onClick={hit} 
+                        extraStyles='m-1 flex-grow' />
+                    <Button 
+                        text='STAND' 
+                        disabled={!(dealerTurn === false)} 
+                        onClick={stand} 
+                        extraStyles='m-1 flex-grow' />
                 </div>
                 <div className='flex justify-between'>
-                    <Button text='DOUBLE DOWN' disabled onClick={() => {}} extraStyles='m-1 flex-grow' />
-                    <Button text='BET ONE' onClick={() => setBet(bet === 5 ? 1 : bet + 1)} extraStyles='m-1 flex-grow' />
-                    <Button text='MAX BET' onClick={() => setBet(5)} extraStyles='m-1 flex-grow' />
+                    <Button 
+                        text='DOUBLE DOWN' 
+                        disabled 
+                        onClick={() => {}} 
+                        extraStyles='m-1 flex-grow' />
+                    <Button 
+                        text='BET ONE' 
+                        disabled={dealerTurn !== null} 
+                        onClick={() => setBet(bet === 5 ? 1 : bet + 1)} 
+                        extraStyles='m-1 flex-grow' />
+                    <Button 
+                        text='MAX BET' 
+                        disabled={dealerTurn !== null} 
+                        onClick={() => setBet(5)} 
+                        extraStyles='m-1 flex-grow' />
                 </div>
             </div>
         </div>

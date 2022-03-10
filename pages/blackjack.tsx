@@ -6,7 +6,7 @@ import PlayingCardModel from '../models/playing-card'
 import useDeck from '../hooks/useDeck'
 import { useAppDispatch } from '../hooks/typedReduxHooks'
 import { increment, decrement } from '../store/bankrollSlice'
-import {getHandValue} from '../utils/blackjack-hands'
+import { getHandValue } from '../utils/blackjack-hands'
 import Modal from '../components/modal'
 
 export default function Blackjack() {
@@ -14,6 +14,7 @@ export default function Blackjack() {
     const [gameStarted, setGameStarted] = useState(false)
     const [dealerTurn, setDealerTurn] = useState<boolean | null>(null)
     const [resultString, setResultString] = useState<string | null>(null)
+    const [doubledDown, setDoubledDown] = useState(false)
     const [dealerCards, setDealerCards] = useState<PlayingCardModel[]>([...new Array(2)].map(
         (el, i) => { return {suit: String(i), rank: String(i)} }
     ))
@@ -37,23 +38,7 @@ export default function Blackjack() {
             stand(null, newDealerCards)
     }
 
-    const hit = () => {
-        const updatedDeck = [...deck]
-        const newCard = drawFromDeck(1, updatedDeck)[0]
-        updatedDeck.shift()
-        const dealerTurnOver = getHandValue([...userCards, newCard]) >= 21
-        setUserCards(c => [...c, newCard])
-        if (dealerTurnOver) stand([...userCards, newCard], null, updatedDeck)
-    }
-
-    const stand = (uc?: PlayingCardModel[] | null, dc?: PlayingCardModel[] | null, currentDeck?: PlayingCardModel[]) => {
-        setDealerTurn(true)
-        if (getHandValue(uc || userCards) > 21) setDealerTurn(null)
-        else if (getHandValue(dc || dealerCards) < 17) setTimeout(() => dealerPlay(dc || dealerCards, currentDeck || deck), 1000)
-        else dealerPlay(dc || dealerCards, currentDeck || deck)
-    }
-
-    const dealerPlay = (cards: PlayingCardModel[], currentDeck: PlayingCardModel[]) => {
+    const dealerPlay = useCallback((cards: PlayingCardModel[], currentDeck: PlayingCardModel[]) => {
         if(getHandValue(cards) < 17) {
             const updatedDeck = [...currentDeck]
             const newCard = drawFromDeck(1, updatedDeck)[0]
@@ -62,10 +47,26 @@ export default function Blackjack() {
             setDealerCards(c => [...c, newCard])
             if (!dealerTurnOver) setTimeout(() => dealerPlay([...cards, newCard], updatedDeck), 1000)
             else setDealerTurn(null)
-            
         } 
         else setDealerTurn(null)
-    }
+    }, [drawFromDeck])
+
+    const stand = useCallback((uc?: PlayingCardModel[] | null, dc?: PlayingCardModel[] | null, currentDeck?: PlayingCardModel[]) => {
+        setDealerTurn(true)
+        if (getHandValue(uc || userCards) > 21) setDealerTurn(null)
+        else if (getHandValue(dc || dealerCards) < 17) setTimeout(() => dealerPlay(dc || dealerCards, currentDeck || deck), 1000)
+        else dealerPlay(dc || dealerCards, currentDeck || deck)
+    }, [dealerCards, dealerPlay, deck, userCards])
+
+
+    const hit = useCallback(() => {
+        const updatedDeck = [...deck]
+        const newCard = drawFromDeck(1, updatedDeck)[0]
+        updatedDeck.shift()
+        const dealerTurnOver = getHandValue([...userCards, newCard]) >= 21
+        setUserCards(c => [...c, newCard])
+        if (dealerTurnOver || doubledDown) stand([...userCards, newCard], null, updatedDeck)
+    }, [deck, doubledDown, drawFromDeck, stand, userCards])
 
     const payout = useCallback((resultMultiplier: number) => 
         dispatch(increment(resultMultiplier * bet)), [bet, dispatch])
@@ -95,9 +96,20 @@ export default function Blackjack() {
                 default:
                     setResultString('This message should not be seen!')
             }
+            if (doubledDown) {
+                newResultMultiplier *= 2
+                setDoubledDown(false)
+            }
             payout(newResultMultiplier)
         }
-    }, [dealerTurn, gameStarted, dealerCards, userCards, payout, resultString])
+    }, [dealerTurn, gameStarted, dealerCards, userCards, payout, resultString, doubledDown])
+
+    useEffect(() => {
+        if (doubledDown && userCards.length === 2) {
+            dispatch(decrement(bet))
+            hit()
+        }
+    }, [doubledDown, dispatch, bet, hit, userCards])
 
     return (
         <div>
@@ -157,8 +169,8 @@ export default function Blackjack() {
                 <div className='flex justify-between'>
                     <Button 
                         text='DOUBLE DOWN' 
-                        disabled 
-                        onClick={() => {}} 
+                        disabled={!(dealerTurn === false) || userCards.length > 2}
+                        onClick={() => setDoubledDown(true)} 
                         extraStyles='m-1 flex-grow' />
                     <Button 
                         text='BET ONE' 

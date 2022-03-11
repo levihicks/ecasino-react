@@ -117,29 +117,41 @@ export default function Blackjack() {
             <div className='relative'>
                 <div>
                     <h4 className='text-xl'>Dealer{gameStarted && dealerTurn !== false && `: ${getHandValue(dealerCards)}`}</h4>
-                    <div className='flex justify-center'>
+                    <div className='relative min-h-[140px] mb-2'>
                         {dealerCards.map((card, i) => 
-                            <PlayingCard 
-                                key={card.suit + card.rank} 
-                                suit={card.suit} 
-                                rank={card.rank} 
-                                onClick={() => {}}
-                                disabled
-                                flipped={!gameStarted || (i !== 0 && dealerTurn === false)} />  
+                            <div 
+                                key={card.suit+card.rank} 
+                                className={`absolute left-[50%]`}
+                                style={{ transform: 'translateX(' + String(-50 + i * 50 + (-25 * (dealerCards.length - 1))) + '%)'}}>
+                                <PlayingCard 
+                                    suit={card.suit} 
+                                    rank={card.rank} 
+                                    onClick={() => {}}
+                                    disabled
+                                    flipped={!gameStarted || (i !== 0 && dealerTurn === false)}
+                                    shadow
+                                    blackjackStyle />  
+                            </div>
                         )}
                     </div>
                 </div>
                 <div className='mb-3'>
                     <h4 className='text-xl'>You{gameStarted && `: ${getHandValue(userCards)}`}</h4>
-                    <div className='flex justify-center'>
-                        {userCards.map(card => 
+                    <div className='flex justify-center relative min-h-[140px] lg:h-[275px]'>
+                        {userCards.map((card, i) => 
+                         <div 
+                         key={card.suit+card.rank} 
+                         className={`absolute left-[50%]`}
+                         style={{ transform: 'translateX(' + String(-50 + i * 50 + (-25 * (userCards.length - 1))) + '%)' }}>
                                 <PlayingCard 
                                     key={card.suit + card.rank} 
                                     suit={card.suit} 
                                     rank={card.rank} 
                                     onClick={() => {}}
                                     disabled
-                                    flipped={!gameStarted} />
+                                    flipped={!gameStarted}
+                                    shadow />
+                                    </div>
                             )}
                         {resultString && (
                             <Modal>{resultString}</Modal>

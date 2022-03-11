@@ -22,6 +22,7 @@ module.exports = {
       },
       boxShadow: {
         DEFAULT: '0 0 50px rgba(4, 232, 36, 1)',
+        md: '-1px 0px 15px black'
       },
       keyframes: {
         floatToBottomLeft: {
